@@ -1,0 +1,99 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin" >
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_below="@+id/pbDownload"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="23dp"
+            android:src="@drawable/default_image" />
+
+        <Button
+            android:id="@+id/btnDownload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/btnDownloadBackground"
+            android:layout_alignRight="@+id/btnDownloadBackground"
+            android:layout_below="@+id/etUrl"
+            android:layout_marginTop="15dp"
+            android:text="Download" />
+		
+        <Button
+            android:id="@+id/btnDownloadBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnDownload"
+            android:layout_centerHorizontal="true"
+            android:text="Download in background" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/btnDownloadBackground"
+            android:layout_alignRight="@+id/btnDownloadBackground"
+            android:layout_below="@+id/btnDownloadBackground"
+            android:text="Save to SD" />
+		<Button
+            android:id="@+id/btnLoad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/btnDownloadBackground"
+            android:layout_alignRight="@+id/btnDownloadBackground"
+            android:layout_below="@+id/btnSave"
+            android:text="Load File" />
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="How to download an Image"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <ProgressBar
+            android:id="@+id/pbDownload"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/image"
+            android:layout_alignRight="@+id/image"
+            android:layout_below="@+id/textView1"
+            android:layout_marginTop="15dp" />
+
+        <EditText
+            android:id="@+id/etUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="enter image url" />
+
+        <TextView
+            android:id="@+id/tvPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/image"
+            android:layout_toRightOf="@+id/pbDownload"
+            android:text="0%" />
+    </RelativeLayout>
+
+</ScrollView>
