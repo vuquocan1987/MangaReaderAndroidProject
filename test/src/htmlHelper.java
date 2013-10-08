@@ -1,5 +1,3 @@
-package com.example.stackoverflow.com;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -10,7 +8,9 @@ import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
 
 public class htmlHelper {
-	final static String siteUrl = "http://www.themoscowtimes.com/";
+	final static String siteUrl = "http://mangafox.me/directory/";
+	
+	
     TagNode rootNode;
     
 
@@ -22,7 +22,14 @@ public class htmlHelper {
     }
     public TagNode getFirstHeadNode() throws IOException,XPatherException {
     	TagNode elements[];
-    	Object firstsNodes[] = rootNode.evaluateXPath("//");
+    	Object firstsNodes[] = rootNode.evaluateXPath("//a[@class='title']");
+    	TagNode firstNode = (TagNode)firstsNodes[0]; 
+    	return firstNode;
+    }
+    public TagNode getmangalink() throws IOException,XPatherException {
+    	TagNode elements[];
+    	Object firstsNodes[] = rootNode.evaluateXPath("//div[@class='slide']/h3/a");
+    	
     	TagNode firstNode = (TagNode)firstsNodes[0]; 
     	return firstNode;
     }
@@ -45,12 +52,18 @@ public class htmlHelper {
 
         return linkList;
     }
-    public static void main(String[] args) {
-    	try{
+    public static void main(String[] args) throws IOException,XPatherException{
+  
 		htmlHelper myHTMLHelper = new htmlHelper(new URL(siteUrl));
-    	}
-    	catch (IOException e){
-    		System.out.println("wrong URL bro");
-    	}
+    	TagNode myHead = myHTMLHelper.getFirstHeadNode();
+    	String themangaLink = myHead.getAttributeByName("href");
+    	System.out.println(themangaLink);
+    	
+    	htmlHelper mangalink = new htmlHelper(new URL(themangaLink));
+    	TagNode mylink = mangalink.getmangalink();
+    	String theLink = mylink.getAttributeByName("href");
+    	
+    	System.out.println(theLink);
+    	
 	}
 }
