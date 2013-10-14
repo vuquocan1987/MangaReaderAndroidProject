@@ -9,7 +9,7 @@ import org.htmlcleaner.XPatherException;
 
 public class htmlHelper {
 	final static String siteUrl = "http://mangafox.me/directory/";
-	
+	final static 
 	
     TagNode rootNode;
     
@@ -28,8 +28,14 @@ public class htmlHelper {
     }
     public TagNode getmangalink() throws IOException,XPatherException {
     	TagNode elements[];
-    	Object firstsNodes[] = rootNode.evaluateXPath("//div[@class='slide']/h3/a");
+    	Object firstsNodes[] = rootNode.evaluateXPath("//a[@class='tips']");
     	
+    	TagNode firstNode = (TagNode)firstsNodes[0];
+    	return firstNode;
+    }
+    public TagNode getMangaPage() throws IOException,XPatherException {
+    	TagNode elements[];
+    	Object firstsNodes[] = rootNode.evaluateXPath("//img[@id='image']");
     	TagNode firstNode = (TagNode)firstsNodes[0]; 
     	return firstNode;
     }
@@ -52,6 +58,12 @@ public class htmlHelper {
 
         return linkList;
     }
+    public static List<String> getPageList(String firstPage){
+    	
+    }
+    public static String binarySearch latestPage(String firstPage){
+    	
+    }
     public static void main(String[] args) throws IOException,XPatherException{
   
 		htmlHelper myHTMLHelper = new htmlHelper(new URL(siteUrl));
@@ -62,8 +74,13 @@ public class htmlHelper {
     	htmlHelper mangalink = new htmlHelper(new URL(themangaLink));
     	TagNode mylink = mangalink.getmangalink();
     	String theLink = mylink.getAttributeByName("href");
-    	
     	System.out.println(theLink);
     	
+    	htmlHelper mangaPage = new htmlHelper (new URL(theLink));
+    	TagNode imgTag = mangaPage.getMangaPage();
+    	String themangaPage = imgTag.getAttributeByName("src");
+    	System.out.println(themangaPage);
+    	
+    	List<String> myPageList= getPageList(themangaPage);
 	}
 }
