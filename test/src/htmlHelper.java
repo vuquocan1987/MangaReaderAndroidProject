@@ -10,7 +10,7 @@ import org.htmlcleaner.XPatherException;
 
 public class htmlHelper {
 	final static String siteUrl = "http://mangafox.me/directory/";
-	
+	final static int topMangaNumb = 20;
 	String theMangaLink;
     TagNode rootNode;
     int latestPage;
