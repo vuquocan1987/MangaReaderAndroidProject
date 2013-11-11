@@ -115,4 +115,21 @@ public class htmlHelper {
     	mangaPage.getFileList();
     	mangaPage.getChapterList();
 	}
+	public List<String> get10mangalink() {
+		// TODO Auto-generated method stub
+		List<String> results = new ArrayList<String>();
+		TagNode elements[];
+    	Object firstsNodes[];
+		try {
+			firstsNodes = rootNode.evaluateXPath("//a[@class='title']");
+			for (int i = 0; i < 10; i++) {
+				TagNode tn = (TagNode)firstsNodes[i];
+				results.add(new String(tn.getText()));
+			}
+		} catch (XPatherException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return results;
+	}
 }
