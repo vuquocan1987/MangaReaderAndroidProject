@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- the theme applied to the application or activity -->
+    <style name="CustomActionBarTheme"
+           parent="@style/Theme.AppCompat.Light">
+        <item name="android:actionBarTabTextStyle">@style/TabTextStyle</item>
+        <item name="actionBarTabTextStyle">@style/TabTextStyle</item>
+        <item name="android:scrollHorizontally">false</item>
+    </style>
+
+	<style name="custom"
+	    	parent = "@style/Theme.AppCompat.Light">
+	</style>
+
+    <!-- action bar tab text -->
+    <style name="TabTextStyle"
+           parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:horizontalSpacing">100dp</item>
+        <item name="android:maxWidth">50dp</item>
+        <item name="android:showDividers">none</item>
+        <item name="showDividers">none</item>
+        
+    </style>
+</resources>
