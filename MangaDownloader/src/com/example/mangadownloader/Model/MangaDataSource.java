@@ -1,4 +1,4 @@
-package Model;
+package com.example.mangadownloader.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,16 @@ public class MangaDataSource {
 		Manga newManga = cursorToManga(cursor);
 		cursor.close();
 		return newManga;
+	}
+	public void addAllManga(List<Manga> mangaList){
+		ContentValues values = new ContentValues();
+		
+		for (Manga manga : mangaList) {
+			values.put(MangaSQLHelper.COLUMN_MANGANAME,manga.getMangaName() );
+			values.put(MangaSQLHelper.COLUMN_LINK,manga.getLink() );
+			values.put(MangaSQLHelper.COLUMN_FAVOURITE,manga.getFavourite() );
+			database.insert(MangaSQLHelper.TABLE_MANGA, null, values);
+		}
 	}
 	public void deleteManga(Manga manga){
 		long id = manga.get_id();

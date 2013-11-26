@@ -1,4 +1,4 @@
-package Model;
+package com.example.mangadownloader.Model;
 
 public class Manga {
 	private long _id;
@@ -36,6 +36,19 @@ public class Manga {
 		this.mangaName = mangaName;
 		this.link = link;
 		this.favourite = favourite;
+	}
+	public Manga(String mangaName, String link, int favourite) {
+		super();
+		
+		this.mangaName = mangaName;
+		this.link = link;
+		this.favourite = favourite;
+	}
+	public Manga(String mangaName, String link) {
+		super();
+		
+		this.mangaName = mangaName;
+		this.link = link;
 	}
 	public void setFavourite(int favourite) {
 		this.favourite = favourite;
