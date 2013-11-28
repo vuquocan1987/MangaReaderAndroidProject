@@ -1,16 +1,6 @@
 package com.example.mangadownloader;
 
-import com.example.service.ParsingService;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.example.mangadownloader.Controller.DownloadChapterService;
-
-import Model.Manga;
-import Model.MangaDataSource;
 import android.app.ActionBar;
-import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,6 +11,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.example.mangadownloader.Model.MangaDataSource;
+import com.example.service.DownloadChapterService;
+import com.example.service.ParsingMangaLinkService;
 
 public class MainActivity extends Activity {
 	public MangaDataSource ds;
@@ -40,7 +34,7 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		ParseFragment mpf =(ParseFragment) getFragmentManager().findFragmentByTag(Configuration.TAG_FRAG_PARSE);
 		if (mpf!=null){
-			mpf.UpdateParsingPage(extras.getInt(ParsingService.CURRENT_NOTIFYING_PAGE));
+			mpf.UpdateParsingPage(extras.getInt(ParsingMangaLinkService.CURRENT_NOTIFYING_PAGE));
 		}
 	}
 
@@ -96,7 +90,7 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		ds.open();
-		registerReceiver(receiver, new IntentFilter(ParsingService.NOTIFICATION));
+		registerReceiver(receiver, new IntentFilter(ParsingMangaLinkService.NOTIFICATION));
 
 	}
 
@@ -108,13 +102,7 @@ public class MainActivity extends Activity {
 		unregisterReceiver(receiver);
 	}
 
-	public List<Manga> initiateDummyManga() {
-		List<Manga> results = new ArrayList<Manga>();
-		for (int i = 0; i < 3; i++) {
-			results.add(new Manga(mangaList[i], mangaLinks[i]));
-		}
-		return results;
-	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -127,12 +115,7 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
-		case R.id.add:
-			ds.createMangaList(initiateDummyManga());
-			break;
-		case R.id.load:
-			// List<Manga> lm = ds.getAllManga();
-			break;
+
 		case R.id.clear:
 			ds.clearMangaTable();
 			break;
@@ -141,10 +124,11 @@ public class MainActivity extends Activity {
 		// break;
 		case R.id.dl:
 			testService();
+			break;
 		case R.id.init:
-			Intent intent = new Intent(this, ParsingService.class);
+			Intent intent = new Intent(this, ParsingMangaLinkService.class);
 			startService(intent);
-			Log.d(Configuration.TAG_LOG, "Service start");
+			Log.d(Configuration.TAG_LOG, "Parsing Service start");
 			Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
 			break;
 		default:
@@ -157,6 +141,7 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(this, DownloadChapterService.class);
 		intent.putExtra(DownloadChapterService.MANGA_NAME, "Naruto");
+		Log.d(Configuration.TAG_LOG, "Download Chapter Service start");
 		intent.putExtra(DownloadChapterService.URL,
 				"http://mangafox.me/manga/naruto/v64/c617/1.html");
 		startService(intent);

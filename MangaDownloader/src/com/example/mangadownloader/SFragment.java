@@ -3,8 +3,9 @@ package com.example.mangadownloader;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Manga;
-import Model.MangaDataSource;
+import com.example.mangadownloader.Model.Manga;
+import com.example.mangadownloader.Model.MangaDataSource;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

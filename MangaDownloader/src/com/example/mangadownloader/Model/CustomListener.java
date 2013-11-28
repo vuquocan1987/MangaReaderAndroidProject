@@ -1,4 +1,4 @@
-package Model;
+package com.example.mangadownloader.Model;
 
 import java.util.List;
 

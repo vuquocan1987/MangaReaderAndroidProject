@@ -1,4 +1,4 @@
-package Model;
+package com.example.mangadownloader.Model;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

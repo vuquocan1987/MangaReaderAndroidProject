@@ -11,17 +11,26 @@ import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
 
-public class htmlHelper {
+import android.content.Context;
+import android.os.AsyncTask;
+import android.widget.Toast;
+
+public class htmlHelper extends AsyncTask<Void,Integer,List<Manga>>{
 	final static String siteUrl = "http://mangafox.me/directory/";
 	final static int topMangaNumb = 20;
 	String theMangaLink;
 	TagNode rootNode;
 	int latestPage;
-
+	Context c;
+    CustomListener cl;
 	public htmlHelper(URL htmlPage) throws IOException {
 		HtmlCleaner cleaner = new HtmlCleaner();
 		rootNode = cleaner.clean(htmlPage);
 	}
+	public htmlHelper(Context c, CustomListener cl) throws MalformedURLException, IOException{
+    	this.cl = cl;
+    	this.c = c;
+    }
 	public void resetRootNodeTo(String url) throws MalformedURLException, IOException{
 		rootNode = (new HtmlCleaner()).clean(new URL(url));
 	}
@@ -37,7 +46,6 @@ public class htmlHelper {
 	public TagNode getmangalink() throws IOException, XPatherException {
 		TagNode elements[];
 		Object firstsNodes[] = rootNode.evaluateXPath("//a[@class='tips']");
-
 		TagNode firstNode = (TagNode) firstsNodes[0];
 		return firstNode;
 	}
@@ -50,6 +58,7 @@ public class htmlHelper {
 		return firstNode;
 	}
 
+	
 	public int latestPage() throws IOException, XPatherException {
 
 		Object pageList[] = rootNode
@@ -89,45 +98,6 @@ public class htmlHelper {
 		return chapterList;
 	}
 
-	List<TagNode> getLinksByClass(String CSSClassname) {
-		List<TagNode> linkList = new ArrayList<TagNode>();
-
-		TagNode linkElements[] = rootNode.getElementsByName("a", true);
-		for (int i = 0; linkElements != null && i < linkElements.length; i++) {
-
-			String classType = linkElements[i].getAttributeByName("class");
-
-			if (classType != null && classType.equals(CSSClassname)) {
-				linkList.add(linkElements[i]);
-			}
-		}
-
-		return linkList;
-	}
-
-	public static String directedMangaPage = "http://mangafox.me/manga/naruto/vTBD/c650/1.html";
-
-	public static void main(String[] args) throws IOException, XPatherException {
-
-		// htmlHelper myHTMLHelper = new htmlHelper(new URL(siteUrl));
-		// TagNode myHead = myHTMLHelper.getFirstHeadNode();
-		// String themangaLink = myHead.getAttributeByName("href");
-		// System.out.println(themangaLink);
-		//
-		// htmlHelper mangalink = new htmlHelper(new URL(themangaLink));
-		// TagNode mylink = mangalink.getmangalink();
-		// String theLink = mylink.getAttributeByName("href");
-		// System.out.println(theLink);
-
-		htmlHelper mangaPage = new htmlHelper(new URL(directedMangaPage));
-		TagNode imgTag = mangaPage.getMangaPage();
-		String themangaPage = imgTag.getAttributeByName("src");
-		System.out.println(themangaPage);
-		System.out.println(mangaPage.latestPage());
-		mangaPage.getFileList();
-		mangaPage.getChapterList();
-	}
-
 	public List<String> get10mangalink() {
 		// TODO Auto-generated method stub
 		List<String> results = new ArrayList<String>();
@@ -144,5 +114,50 @@ public class htmlHelper {
 			e.printStackTrace();
 		}
 		return results;
+	}
+	@Override
+	protected void onPreExecute() {
+		Toast.makeText(c, "start parsing", Toast.LENGTH_SHORT).show();
+	}
+	@Override
+	protected List<Manga> doInBackground(Void... params) {
+		// TODO Auto-generated method stub
+		List<Manga> results = new ArrayList<Manga>();
+		List<String> mNames = new ArrayList<String>();
+		List<String> mLinks = new ArrayList<String>();
+		HtmlCleaner cleaner = new HtmlCleaner();
+		try {
+			String tmpsiteUrl;
+			for (int i = 1; i < 10; i++) {
+				tmpsiteUrl = siteUrl+ "/" + i + ".htm";
+				rootNode = cleaner.clean(new URL(tmpsiteUrl));
+				TagNode elements[];
+		    	Object firstsNodes[];
+					firstsNodes = rootNode.evaluateXPath("//a[@class='title']");
+					for (int j = 0; j < firstsNodes.length; j++) {
+						TagNode tn = (TagNode)firstsNodes[j];
+						mNames.add(new String(tn.getText()));
+						mLinks.add(tn.getAttributeByName("href"));
+						Manga tManga = new Manga(new String(tn.getText()), tn.getAttributeByName("href"));
+						results.add(tManga);
+					}
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XPatherException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
+	}
+	@Override
+	protected void onPostExecute(List<Manga> result) {
+		super.onPostExecute(result); 
+		cl.onFinish(result);
+		Toast.makeText(c, "done", Toast.LENGTH_SHORT).show();
 	}
 }

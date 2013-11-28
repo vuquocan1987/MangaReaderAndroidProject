@@ -1,4 +1,4 @@
-package Model;
+package com.example.mangadownloader.Model;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,6 +32,7 @@ public class HtmlHelperPageGetter {
     	return latestPage;
     }
     public List<String> getFileList() throws IOException, XPatherException {
+    	latestPage();
     	List<String> fileList = new ArrayList<String>();
     	String firstPageBitmap = getFirstPageChapter();
     	String fullPath = FilenameUtils.getFullPath(firstPageBitmap);

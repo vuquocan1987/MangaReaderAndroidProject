@@ -15,7 +15,7 @@ import com.example.mangadownloader.Configuration;
 import com.example.mangadownloader.Model.HtmlMangaHelper;
 import com.example.mangadownloader.Model.MangaDataSource;
 
-public class ParsingService extends IntentService {
+public class ParsingMangaLinkService extends IntentService {
 	public static String PARSING_SERVICE_NAME = "ParsingService";
 	public static String SERVICE_PREFERENCE = "Service_Preference";
 	public static String CURRENT_PAGE = "current_page";
@@ -24,7 +24,7 @@ public class ParsingService extends IntentService {
 	public static int PARSE_STEP = 1;
 	public static String NOTIFICATION = "com.example.service.ParsingService";
 
-	public ParsingService() {
+	public ParsingMangaLinkService() {
 
 		super(PARSING_SERVICE_NAME);
 		// TODO Auto-generated constructor stub

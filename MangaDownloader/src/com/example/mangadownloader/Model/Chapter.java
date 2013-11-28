@@ -1,4 +1,4 @@
-package Model;
+package com.example.mangadownloader.Model;
 
 public class Chapter {
 	String mangaName;

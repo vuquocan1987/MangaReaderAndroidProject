@@ -1,4 +1,4 @@
-package Model;
+package com.example.mangadownloader.Model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;

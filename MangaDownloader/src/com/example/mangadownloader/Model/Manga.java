@@ -37,21 +37,17 @@ public class Manga {
 		this.link = link;
 		this.favourite = favourite;
 	}
+	public void setFavourite(int favourite) {
+		this.favourite = favourite;
+	}
 	public Manga(String mangaName, String link, int favourite) {
 		super();
-		
 		this.mangaName = mangaName;
 		this.link = link;
 		this.favourite = favourite;
 	}
 	public Manga(String mangaName, String link) {
-		super();
-		
-		this.mangaName = mangaName;
-		this.link = link;
-	}
-	public void setFavourite(int favourite) {
-		this.favourite = favourite;
+		this(mangaName,link,0);
 	}
 
 }
