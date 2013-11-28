@@ -25,11 +25,11 @@ import android.widget.Toast;
 public class MangaDataSource {
 	private Context context;
 	private SQLiteDatabase database;
-	private MangaSQLHelper dbHelper;
-	private String[] allColumns = {MangaSQLHelper.COLUMN_ID,MangaSQLHelper.COLUMN_MANGANAME,
-			MangaSQLHelper.COLUMN_LINK,MangaSQLHelper.COLUMN_FAVOURITE};
+	private DatabaseMangaSQLHelper dbHelper;
+	private String[] allColumns = {DatabaseMangaSQLHelper.COLUMN_ID,DatabaseMangaSQLHelper.COLUMN_MANGANAME,
+			DatabaseMangaSQLHelper.COLUMN_LINK,DatabaseMangaSQLHelper.COLUMN_FAVOURITE};
 	public MangaDataSource(Context context){
-		dbHelper = new MangaSQLHelper(context);
+		dbHelper = new DatabaseMangaSQLHelper(context);
 		this.context = context;
 		copyDatabase();
 	}
@@ -42,22 +42,22 @@ public class MangaDataSource {
 	public void addAllManga (List<Manga> mangaList){
 		ContentValues values = new ContentValues();
 		for (Manga manga : mangaList) {
-			values.put(MangaSQLHelper.COLUMN_MANGANAME,manga.getMangaName());
-			values.put(MangaSQLHelper.COLUMN_LINK, manga.getLink());
-			values.put(MangaSQLHelper.COLUMN_FAVOURITE, manga.getFavourite());
-			database.insert(MangaSQLHelper.TABLE_MANGA, null, values);
+			values.put(DatabaseMangaSQLHelper.COLUMN_MANGANAME,manga.getMangaName());
+			values.put(DatabaseMangaSQLHelper.COLUMN_LINK, manga.getLink());
+			values.put(DatabaseMangaSQLHelper.COLUMN_FAVOURITE, manga.getFavourite());
+			database.insert(DatabaseMangaSQLHelper.TABLE_MANGA, null, values);
 			values.clear();
 		}
 	}
 	public Manga createManga (String manga,String link,int favourite){
 		ContentValues values = new ContentValues();
-		values.put(MangaSQLHelper.COLUMN_MANGANAME,manga );
-		values.put(MangaSQLHelper.COLUMN_LINK,link );
-		values.put(MangaSQLHelper.COLUMN_FAVOURITE,favourite );
+		values.put(DatabaseMangaSQLHelper.COLUMN_MANGANAME,manga );
+		values.put(DatabaseMangaSQLHelper.COLUMN_LINK,link );
+		values.put(DatabaseMangaSQLHelper.COLUMN_FAVOURITE,favourite );
 		
-		long insertID = database.insert(MangaSQLHelper.TABLE_MANGA, null, values);
+		long insertID = database.insert(DatabaseMangaSQLHelper.TABLE_MANGA, null, values);
 		
-		Cursor cursor = database.query(MangaSQLHelper.TABLE_MANGA, allColumns, MangaSQLHelper.COLUMN_ID+ " = "+insertID,
+		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_MANGA, allColumns, DatabaseMangaSQLHelper.COLUMN_ID+ " = "+insertID,
 				null, null, null, null);
 		cursor.moveToFirst();
 		Manga newManga = cursorToManga(cursor);
@@ -65,16 +65,16 @@ public class MangaDataSource {
 		return newManga;
 	}
 	public void clearMangaTable(){
-		database.delete(MangaSQLHelper.TABLE_MANGA, null, null);
+		database.delete(DatabaseMangaSQLHelper.TABLE_MANGA, null, null);
 	}
 	public void deleteManga(Manga manga){
 		long id = manga.get_id();
 		System.out.println("Manga deleted with id: "+id);
-		database.delete(MangaSQLHelper.TABLE_MANGA, MangaSQLHelper.COLUMN_ID + " = " + id,null);
+		database.delete(DatabaseMangaSQLHelper.TABLE_MANGA, DatabaseMangaSQLHelper.COLUMN_ID + " = " + id,null);
 	}
 	public List<Manga> getAllManga(){
 		List<Manga> mangas = new ArrayList<Manga>();
-		Cursor cursor = database.query(MangaSQLHelper.TABLE_MANGA, allColumns, null, null, null, null, null);
+		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_MANGA, allColumns, null, null, null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()){
 			Manga manga = cursorToManga(cursor);
@@ -129,14 +129,14 @@ public class MangaDataSource {
 
 		}
 
-		String songDBPath = dBpath + "/" + MangaSQLHelper.DATABASE_NAME;
+		String songDBPath = dBpath + "/" + DatabaseMangaSQLHelper.DATABASE_NAME;
 		File songDbFile = new File(songDBPath);
 		if (!songDbFile.exists()) {
 			Log.d(Configuration.TAG_LOG, "manga.db is not exist, proceed to copy db.");
 			try {
 				AssetManager asset = context.getAssets();
 
-				InputStream is = asset.open(MangaSQLHelper.DATABASE_NAME);
+				InputStream is = asset.open(DatabaseMangaSQLHelper.DATABASE_NAME);
 
 				FileOutputStream fos = new FileOutputStream(songDbFile);
 				byte[] buffer = new byte[1024];

@@ -15,11 +15,11 @@ import android.widget.Toast;
 public class ChapterDataSource {
 	private Context context;
 	private SQLiteDatabase database;
-	private MangaSQLHelper dbHelper;
-	private String[] allColumns = {ChapterSQLHelper.COLUMN_MANGANAME,ChapterSQLHelper.COLUMN_CHAPTER_NO,
-			ChapterSQLHelper.COLUMN_CHAPTER_LINK};
+	private DatabaseMangaSQLHelper dbHelper;
+	private String[] allColumns = {DatabaseMangaSQLHelper.COLUMN_MANGANAME,DatabaseMangaSQLHelper.COLUMN_CHAPTER_NO,
+			DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK};
 	public ChapterDataSource(Context context){
-		dbHelper = new MangaSQLHelper(context);
+		dbHelper = new DatabaseMangaSQLHelper(context);
 		this.context = context;
 	}
 	public void open() throws SQLException{
@@ -28,25 +28,26 @@ public class ChapterDataSource {
 	public void close (){
 		dbHelper.close();
 	}
-	public void createChapterList (List<Chapter> chapterList){
+	public void addChapterList (List<Chapter> chapterList,String mangaName){
 		ContentValues values = new ContentValues();
 		for (Chapter chapter : chapterList) {
-			values.put(ChapterSQLHelper.COLUMN_CHAPTER_LINK,chapter.getChapterLink());
-			values.put(ChapterSQLHelper.COLUMN_MANGANAME, chapter.getMangaName());
-			values.put(ChapterSQLHelper.COLUMN_CHAPTER_NO, chapter.getChapterNo());
-			database.insert(ChapterSQLHelper.TABLE_CHAPTER, null, values);
+			values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK,chapter.getChapterLink());
+			values.put(DatabaseMangaSQLHelper.COLUMN_MANGANAME, mangaName);
+			values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_NO, chapter.getChapterNo());
+			values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_NAME, chapter.getChapterName());
+			database.insert(DatabaseMangaSQLHelper.TABLE_CHAPTER, null, values);
 			values.clear();
 		}
 	}
 	public Chapter createManga (Chapter chapter){
 		ContentValues values = new ContentValues();
-		values.put(ChapterSQLHelper.COLUMN_CHAPTER_LINK,chapter.getChapterLink());
-		values.put(ChapterSQLHelper.COLUMN_MANGANAME, chapter.getMangaName());
-		values.put(ChapterSQLHelper.COLUMN_CHAPTER_NO, chapter.getChapterNo());
+		values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK,chapter.getChapterLink());
+		values.put(DatabaseMangaSQLHelper.COLUMN_MANGANAME, chapter.getMangaName());
+		values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_NO, chapter.getChapterNo());
 		
 //		long insertID = database.insert(ChapterSQLHelper.TABLE_CHAPTER, null, values);
 		
-		Cursor cursor = database.query(ChapterSQLHelper.TABLE_CHAPTER, allColumns, ChapterSQLHelper.COLUMN_CHAPTER_LINK+ " = "
+		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_CHAPTER, allColumns, DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK+ " = "
 		+chapter.getChapterLink(), null, null, null, null);
 		cursor.moveToFirst();
 		Chapter newChapter = cursorToChapter(cursor);
@@ -59,11 +60,11 @@ public class ChapterDataSource {
 	public void deleteChapter(Chapter chapter){
 		String link = chapter.getChapterLink();
 		System.out.println("Manga deleted with link: "+link);
-		database.delete(ChapterSQLHelper.TABLE_CHAPTER, ChapterSQLHelper.COLUMN_CHAPTER_LINK + " = " + link,null);
+		database.delete(DatabaseMangaSQLHelper.TABLE_CHAPTER, DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK + " = " + link,null);
 	}
 	public List<Chapter> getAllChapter(){
 		List<Chapter> chapters = new ArrayList<Chapter>();
-		Cursor cursor = database.query(ChapterSQLHelper.TABLE_CHAPTER, allColumns, null, null, null, null, null);
+		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_CHAPTER, allColumns, null, null, null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()){
 			Chapter chapter = cursorToChapter(cursor);

@@ -12,8 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.mangadownloader.Model.DatabaseMangaSQLHelper;
 import com.example.mangadownloader.Model.MangaDataSource;
 import com.example.service.DownloadChapterService;
+import com.example.service.ParsingChapterMangaService;
 import com.example.service.ParsingMangaLinkService;
 
 public class MainActivity extends Activity {
@@ -41,6 +43,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		((new DatabaseMangaSQLHelper(this)).getWritableDatabase()).execSQL(DatabaseMangaSQLHelper.TABLE_CHAPTER_CREATE); 
 		ActionBar bar = getActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		bar.setDisplayShowTitleEnabled(false);
@@ -125,6 +128,10 @@ public class MainActivity extends Activity {
 		case R.id.dl:
 			testService();
 			break;
+		case R.id.testPCM:
+			parseMangaChapter("gang_king", "http://mangafox.me/manga/gang_king/" );
+			Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
+			break;
 		case R.id.init:
 			Intent intent = new Intent(this, ParsingMangaLinkService.class);
 			startService(intent);
@@ -136,7 +143,15 @@ public class MainActivity extends Activity {
 		}
 		return true;
 	}
-
+	private void parseMangaChapter(String mangaName,String mangaURL){
+		
+		Intent intent = new Intent(this, ParsingChapterMangaService.class);
+		intent.putExtra(ParsingChapterMangaService.MANGA_NAME, mangaName);
+		intent.putExtra(ParsingChapterMangaService.URL, mangaURL);
+		startService(intent);
+		Log.d(Configuration.TAG_LOG, "Parsing Chapter Manga Service start");
+		
+	}
 	private void testService() {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(this, DownloadChapterService.class);

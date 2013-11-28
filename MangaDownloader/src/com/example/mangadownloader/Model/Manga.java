@@ -1,10 +1,20 @@
 package com.example.mangadownloader.Model;
 
+import java.util.List;
+
 public class Manga {
 	private long _id;
 	private String mangaName;
 	private String link;
 	private int favourite;
+	private List<Chapter> chapters;
+	
+	public List<Chapter> getChapters() {
+		return chapters;
+	}
+	public void setChapters(List<Chapter> chapters) {
+		this.chapters = chapters;
+	}
 	@Override
 	public String toString() {
 		return mangaName;

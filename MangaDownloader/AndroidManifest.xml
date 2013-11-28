@@ -31,6 +31,8 @@
         </service>
         <service android:name="com.example.service.DownloadChapterService" >
         </service>
+        <service android:name="com.example.service.ParsingChapterMangaService">
+        </service>
     </application>
 
 </manifest>

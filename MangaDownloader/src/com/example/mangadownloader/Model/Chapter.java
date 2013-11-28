@@ -5,7 +5,19 @@ public class Chapter {
 	int chapterNo;
 	String chapterLink;
 	int pageNo;
+	String chapterName;
 	
+	public String getChapterName() {
+		return chapterName;
+	}
+	public void setChapterName(String chapterName) {
+		this.chapterName = chapterName;
+	}
+	public Chapter (int chapterNo,String chapterLink,String chapterName ){
+		this.chapterNo = chapterNo;
+		this.chapterLink = chapterLink;
+		this.chapterName = chapterName;
+	}
 	public Chapter(String mangaName, int chapterNo, String chapterLink,
 			int pageNo) {
 		super();

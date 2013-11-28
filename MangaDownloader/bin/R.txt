@@ -292,6 +292,7 @@ int id showTitle 0x7f050006
 int id split_action_bar 0x7f05001e
 int id submit_area 0x7f050039
 int id tabMode 0x7f050002
+int id testPCM 0x7f050044
 int id title 0x7f05002b
 int id top_action_bar 0x7f050020
 int id txtSearch 0x7f05003d

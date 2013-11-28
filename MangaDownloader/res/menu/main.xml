@@ -22,5 +22,10 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:title="dl"/>
+     <item
+        android:id="@+id/testPCM"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="PCM"/>
 
 </menu>
