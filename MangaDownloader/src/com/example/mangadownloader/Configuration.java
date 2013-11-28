@@ -5,6 +5,7 @@ public class Configuration {
 	public static final String TAG_FRAG_FAVOURITE = "frag_favourite";
 	public static final String TAG_FRAG_DOWNLOADING = "frag_downloading" ;
 	public static final String TAG_FRAG_DOWNLOAD = "frag_download";
+	public static final String TAG_FRAG_PARSE = "frag_parse";
 	public static final String MANGA_FOX_SITE = "http://mangafox.me/directory/";
 	public static final String TAG_LOG = "MangaDownloader";
 	

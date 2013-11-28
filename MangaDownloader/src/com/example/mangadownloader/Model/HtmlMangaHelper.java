@@ -28,7 +28,7 @@ public class HtmlMangaHelper extends htmlHelper {
 	public List<Manga> getAllManga(int currentPage,int noPage) throws MalformedURLException, IOException, XPatherException{
 		
 		List<Manga> results = new ArrayList<Manga>();
-		for (int i = currentPage; i <= currentPage+noPage; i++) {
+		for (int i = currentPage; i < currentPage+noPage; i++) {
 			resetRootNodeTo(MANGA_FOX_PAGE+i+".htm");
 			Object nodes [] = rootNode.evaluateXPath(XPATH_MANGA_NAME);
 			for (int j = 0; j < nodes.length; j++) {

@@ -12,7 +12,10 @@ import Model.MangaDataSource;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +24,26 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	public MangaDataSource ds;
+	public static String[] mangaList = { "Naruto", "Fairy Tail", "Noblesse" };
+	public static String[] mangaLinks = { "lNaruto", "lFairy Tail", "lNoblesse" };
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			handleResult(intent.getExtras());
+		}
+
+	};
+
+	private void handleResult(Bundle extras) {
+		// TODO Auto-generated method stub
+		ParseFragment mpf =(ParseFragment) getFragmentManager().findFragmentByTag(Configuration.TAG_FRAG_PARSE);
+		if (mpf!=null){
+			mpf.UpdateParsingPage(extras.getInt(ParsingService.CURRENT_NOTIFYING_PAGE));
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,7 +56,8 @@ public class MainActivity extends Activity {
 				.newTab()
 				.setTabListener(
 						new MainTabListener<SFragment>(this,
-								Configuration.TAG_FRAG_SEARCH, SFragment.class)).setIcon(R.drawable.action_search));
+								Configuration.TAG_FRAG_SEARCH, SFragment.class))
+				.setIcon(R.drawable.action_search));
 		bar.addTab(bar
 				.newTab()
 				.setIcon(R.drawable.rating_important)
@@ -55,34 +79,50 @@ public class MainActivity extends Activity {
 						new MainTabListener<DDFragment>(this,
 								Configuration.TAG_FRAG_DOWNLOAD,
 								DDFragment.class)));
-		Tab t = bar.newTab();
-//		bar.setDisplayShowTitleEnabled(false);
-//		bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
-		bar.addTab(bar.newTab().setText("Search").setTabListener(new MainTabListener<SFragment>(this, Configuration.TAG_FRAG_SEARCH,SFragment.class)));
-		bar.addTab(bar.newTab().setText("Favourite").setTabListener(new MainTabListener<FFragment>(this, Configuration.TAG_FRAG_FAVOURITE,FFragment.class)));
-		bar.addTab(bar.newTab().setText("Downloading").setTabListener(new MainTabListener<DFragment>(this, Configuration.TAG_FRAG_DOWNLOADING,DFragment.class)));
-		bar.addTab(bar.newTab().setText("Download").setTabListener(new MainTabListener<DDFragment>(this, Configuration.TAG_FRAG_DOWNLOAD,DDFragment.class)));
-		
-		// initiate DataSource
+		bar.addTab(bar
+				.newTab()
+				.setIcon(R.drawable.device_access_sd_storage)
+				.setTabListener(
+						new MainTabListener<ParseFragment>(this,
+								Configuration.TAG_FRAG_PARSE,
+								ParseFragment.class)));
 		ds = new MangaDataSource(this);
-		ds.open();
+		
+
 	}
 
-	public static String[] mangaList = {"Naruto","Fairy Tail","Noblesse"};
-	public static String[] mangaLinks = {"lNaruto","lFairy Tail","lNoblesse"};
-	public List<Manga> initiateDummyManga(){
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		ds.open();
+		registerReceiver(receiver, new IntentFilter(ParsingService.NOTIFICATION));
+
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		ds.close();
+		unregisterReceiver(receiver);
+	}
+
+	public List<Manga> initiateDummyManga() {
 		List<Manga> results = new ArrayList<Manga>();
 		for (int i = 0; i < 3; i++) {
-			results.add(new Manga(mangaList[i],mangaLinks[i]));
+			results.add(new Manga(mangaList[i], mangaLinks[i]));
 		}
 		return results;
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
@@ -91,18 +131,18 @@ public class MainActivity extends Activity {
 			ds.createMangaList(initiateDummyManga());
 			break;
 		case R.id.load:
-//			List<Manga> lm = ds.getAllManga();
+			// List<Manga> lm = ds.getAllManga();
 			break;
 		case R.id.clear:
 			ds.clearMangaTable();
 			break;
-//		case R.id.init:
-//			ds.initMangaTable();
-//			break;
+		// case R.id.init:
+		// ds.initMangaTable();
+		// break;
 		case R.id.dl:
 			testService();
 		case R.id.init:
-			Intent intent = new Intent(this,ParsingService.class);
+			Intent intent = new Intent(this, ParsingService.class);
 			startService(intent);
 			Log.d(Configuration.TAG_LOG, "Service start");
 			Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
@@ -112,11 +152,13 @@ public class MainActivity extends Activity {
 		}
 		return true;
 	}
+
 	private void testService() {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent(this,DownloadChapterService.class);
+		Intent intent = new Intent(this, DownloadChapterService.class);
 		intent.putExtra(DownloadChapterService.MANGA_NAME, "Naruto");
-		intent.putExtra(DownloadChapterService.URL, "http://mangafox.me/manga/naruto/v64/c617/1.html");
+		intent.putExtra(DownloadChapterService.URL,
+				"http://mangafox.me/manga/naruto/v64/c617/1.html");
 		startService(intent);
 	}
 }

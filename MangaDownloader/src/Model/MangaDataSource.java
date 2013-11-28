@@ -1,15 +1,24 @@
 package Model;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.mangadownloader.Configuration;
+
+
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.Toast;
 
 public class MangaDataSource {
@@ -21,6 +30,7 @@ public class MangaDataSource {
 	public MangaDataSource(Context context){
 		dbHelper = new MangaSQLHelper(context);
 		this.context = context;
+		copyDatabase();
 	}
 	public void open() throws SQLException{
 		database = dbHelper.getWritableDatabase();
@@ -73,6 +83,7 @@ public class MangaDataSource {
 		cursor.close();
 		return mangas;
 	}
+	
 	private Manga cursorToManga(Cursor cursor) {
 		Manga manga = new Manga(cursor.getLong(0), cursor.getString(1), cursor.getString(2),cursor.getInt(3));
 		return manga;
@@ -104,4 +115,49 @@ public class MangaDataSource {
 			e.printStackTrace();
 		}
 	}
+	public void copyDatabase() {
+
+		String dBpath = context.getFilesDir().getParent() + "/databases";
+		File fileDbpath = new File(dBpath);
+		Log.d("KaraokeList", dBpath);
+		if (!fileDbpath.exists()) {
+			Log.d(Configuration.TAG_LOG, "databases dir is not exist, creating db dir");
+			fileDbpath.mkdir();
+		} else {
+			Log.d(Configuration.TAG_LOG, "databases dir is exists");
+
+		}
+
+		String songDBPath = dBpath + "/" + MangaSQLHelper.DATABASE_NAME;
+		File songDbFile = new File(songDBPath);
+		if (!songDbFile.exists()) {
+			Log.d(Configuration.TAG_LOG, "manga.db is not exist, proceed to copy db.");
+			try {
+				AssetManager asset = context.getAssets();
+
+				InputStream is = asset.open(MangaSQLHelper.DATABASE_NAME);
+
+				FileOutputStream fos = new FileOutputStream(songDbFile);
+				byte[] buffer = new byte[1024];
+
+				int len;
+
+				while ((len = is.read(buffer)) > 0) {
+					fos.write(buffer, 0, len);
+
+				}
+
+				is.close();
+				fos.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		} else {
+			Log.d(Configuration.TAG_LOG, "manga.db is exist.");
+		}
+
+	}
+
 }
