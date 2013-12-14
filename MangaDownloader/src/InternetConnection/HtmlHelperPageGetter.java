@@ -1,4 +1,4 @@
-package com.example.mangadownloader.Model;
+package InternetConnection;
 
 import java.io.IOException;
 import java.net.URL;

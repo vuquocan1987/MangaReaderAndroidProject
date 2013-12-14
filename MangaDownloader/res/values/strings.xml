@@ -4,5 +4,7 @@
     <string name="app_name">MangaDownloader</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="chapterName">MangaChapter</string>
+    <string name="mangaName">naruto</string>
 
 </resources>

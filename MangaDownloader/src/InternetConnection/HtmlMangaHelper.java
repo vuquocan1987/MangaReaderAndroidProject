@@ -1,4 +1,4 @@
-package com.example.mangadownloader.Model;
+package InternetConnection;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -9,6 +9,8 @@ import java.util.List;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
+
+import com.example.mangadownloader.Model.Manga;
 
 import android.content.Context;
 

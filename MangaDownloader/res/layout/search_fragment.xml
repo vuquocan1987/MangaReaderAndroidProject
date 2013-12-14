@@ -7,22 +7,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <EditText
-            android:id="@+id/txtSearch"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ems="10" >
-
-            <requestFocus />
-        </EditText>
-
-        <ImageButton
-            android:id="@+id/btnSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:src="@drawable/action_search" />
+      <SearchView
+          android:id="@+id/searchView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1" >
+      </SearchView>
     </LinearLayout>
 
     <ListView

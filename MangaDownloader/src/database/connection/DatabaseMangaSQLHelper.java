@@ -1,4 +1,4 @@
-package com.example.mangadownloader.Model;
+package database.connection;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,27 +13,35 @@ public class DatabaseMangaSQLHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_CHAPTER_LINK = "chapter_link";
 	public static final String COLUMN_CHAPTER_NO = "chapter_number";
 	public static final String COLUMN_CHAPTER_NAME = "chapter_name";
+	public static final String COLUMN_CHAPTER_STATUS = "status";
+	public static final String COLUMN_CHAPTER_CURRENT_PAGE = "current_page";
+	public static final String COLUMN_CHAPTER_ID = "_id";
 	
 	public static final String TABLE_MANGA = "manga";
-	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_MANGA_ID = "_id";
 	public static final String COLUMN_MANGANAME = "manganame";
 	public static final String COLUMN_LINK = "link";
 	public static final String COLUMN_FAVOURITE = "favourite";
 	
-	public static final String TABLE_CHAPTER_CREATE = "create table "+ TABLE_CHAPTER + " ( " 
+	
+	
+	
+	
+	
+	public static final String TABLE_CHAPTER_CREATE = "create table "+ TABLE_CHAPTER + " ( "
+													+COLUMN_CHAPTER_ID +" integer primary key autoincrement, " 
 													+COLUMN_MANGANAME + " text not null, "
 													+COLUMN_CHAPTER_LINK + " text not null, "
 													+COLUMN_CHAPTER_NO + " integer not null, "
-													+COLUMN_CHAPTER_NAME + " text not null);";
-	
-	
+													+COLUMN_CHAPTER_NAME + " text not null, "
+													+COLUMN_CHAPTER_STATUS + " int not null);";
 
 	private static final String TABLE_MANGA_CREATE = "create table " + TABLE_MANGA
-			+ "(" + COLUMN_ID + " integer primary key autoincrement, "
+			+ "(" + COLUMN_MANGA_ID + " integer primary key autoincrement, "
 			+ COLUMN_MANGANAME + " text unique, " + COLUMN_LINK
 			+ " text not null, " + COLUMN_FAVOURITE + " integer not null);";
 	public static final String DATABASE_NAME = "manga.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private Context c;
 
 	public DatabaseMangaSQLHelper(Context context) {
@@ -63,7 +71,8 @@ public class DatabaseMangaSQLHelper extends SQLiteOpenHelper {
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data "
 						+ TABLE_MANGA);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_MANGA);
-		onCreate(db);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_MANGA);
+//		onCreate(db);
+		db.execSQL("alter table "+TABLE_CHAPTER+ " add column " + COLUMN_CHAPTER_STATUS + " integer default 0 " );
 	}
 }

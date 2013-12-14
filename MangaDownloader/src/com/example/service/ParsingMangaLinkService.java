@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.htmlcleaner.XPatherException;
 
+import InternetConnection.HtmlMangaHelper;
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
@@ -11,9 +12,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
-import com.example.mangadownloader.Configuration;
-import com.example.mangadownloader.Model.HtmlMangaHelper;
-import com.example.mangadownloader.Model.MangaDataSource;
+
+import config.Config;
+import database.connection.MangaDataSource;
 
 public class ParsingMangaLinkService extends IntentService {
 	public static String PARSING_SERVICE_NAME = "ParsingService";
@@ -56,7 +57,7 @@ public class ParsingMangaLinkService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		// TODO Auto-generated method stub
 		// android.os.Debug.waitForDebugger();
-		Log.d(Configuration.TAG_LOG, "In onHandleIntent");
+		Log.d(Config.TAG_LOG, "In onHandleIntent");
 		try {
 
 			HtmlMangaHelper htmlHelper = new HtmlMangaHelper();
@@ -70,16 +71,16 @@ public class ParsingMangaLinkService extends IntentService {
 				publishResults(Activity.RESULT_OK);
 			}
 			mangaDataSource.close();
-			Log.d(Configuration.TAG_LOG, "Success");
+			Log.d(Config.TAG_LOG, "Success");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.d(Configuration.TAG_LOG, "Fail Opening new HtmlMangaHelper");
+			Log.d(Config.TAG_LOG, "Fail Opening new HtmlMangaHelper");
 			return;
 		} catch (XPatherException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.d(Configuration.TAG_LOG, "Fail Parsing MangaFox Page");
+			Log.d(Config.TAG_LOG, "Fail Parsing MangaFox Page");
 		}
 
 	}

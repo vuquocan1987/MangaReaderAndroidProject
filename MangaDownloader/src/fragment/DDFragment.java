@@ -1,4 +1,7 @@
-package com.example.mangadownloader;
+package fragment;
+
+import com.example.mangadownloader.R;
+import com.example.mangadownloader.R.layout;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -6,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class DFragment extends Fragment {
+public class DDFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
