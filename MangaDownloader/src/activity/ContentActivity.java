@@ -1,6 +1,7 @@
-package com.example.mangadownloader;
+package activity;
 
 import fragment.ContentFragment;
+import an.vu.mangadownloader.R;
 import android.app.Activity;
 import android.os.Bundle;
 

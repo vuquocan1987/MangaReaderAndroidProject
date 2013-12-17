@@ -1,4 +1,4 @@
-package InternetConnection;
+package internetconnection;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -6,11 +6,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Chapter;
+
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
 
-import com.example.mangadownloader.Model.Chapter;
 
 import android.content.Context;
 
@@ -34,7 +35,7 @@ public class HtmlChapterHelper extends htmlHelper {
 		Chapter c;
 		for (int i = 0; i < nodes.length; i++) {
 			TagNode tmp = (TagNode) nodes[i];
-			c =  new Chapter(i+1,tmp.getAttributeByName("href"),tmp.getText().toString());
+			c =  new Chapter(i+1,tmp.getAttributeByName("href")+"/1.htm",tmp.getText().toString());
 			results.add(c);
 		}
 		return results;

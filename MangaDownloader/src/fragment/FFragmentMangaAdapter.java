@@ -1,19 +1,18 @@
 package fragment;
 import java.util.ArrayList;
 
+import model.Manga;
+
+import an.vu.mangadownloader.R;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
-import com.example.mangadownloader.R;
-import com.example.mangadownloader.Model.Manga;
-import com.example.mangadownloader.R.id;
 
 
 

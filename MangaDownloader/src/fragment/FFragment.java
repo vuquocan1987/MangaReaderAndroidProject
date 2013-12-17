@@ -3,6 +3,11 @@ package fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import service.ParsingChapterMangaService;
+
+import model.Manga;
+
+import an.vu.mangadownloader.R;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Context;
@@ -13,17 +18,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mangadownloader.R;
-import com.example.mangadownloader.Model.Manga;
-import com.example.mangadownloader.R.id;
-import com.example.mangadownloader.R.layout;
-import com.example.service.ParsingChapterMangaService;
 
 import database.connection.MangaDataSource;
 
@@ -56,7 +55,6 @@ public class FFragment extends ListFragment {
 		super.onListItemClick(l, v, position, id);
 		Manga manga = (Manga) l.getItemAtPosition(position);
 		mangaSelectedListener.onSelectManga(manga);
-
 	}
 
 	@Override
@@ -80,11 +78,7 @@ public class FFragment extends ListFragment {
 		mds.close();
 	}
 
-	@Override
-	public void onDetach() {
-		// TODO Auto-generated method stub
 
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

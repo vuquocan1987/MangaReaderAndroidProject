@@ -1,4 +1,4 @@
-package com.example.mangadownloader;
+package activity;
 
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;

@@ -1,12 +1,15 @@
-package com.example.service;
+package service;
+
+import internetconnection.HtmlChapterHelper;
+import internetconnection.HtmlMangaHelper;
 
 import java.io.IOException;
 import java.util.List;
 
+import model.Chapter;
+
 import org.htmlcleaner.XPatherException;
 
-import InternetConnection.HtmlChapterHelper;
-import InternetConnection.HtmlMangaHelper;
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
@@ -14,7 +17,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
-import com.example.mangadownloader.Model.Chapter;
 
 import config.Config;
 import database.connection.ChapterDataSource;

@@ -1,5 +1,7 @@
 package database.connection;
 
+import internetconnection.htmlHelper;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,13 +10,13 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.mangadownloader.Model.CustomListener;
-import com.example.mangadownloader.Model.Manga;
+import model.CustomListener;
+import model.Manga;
+
 
 import config.Config;
 
 
-import InternetConnection.htmlHelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -27,10 +29,10 @@ import android.widget.Toast;
 public class MangaDataSource {
 	private Context context;
 	private SQLiteDatabase database;
-	private DatabaseMangaSQLHelper dbHelper;
+	private DatabaseHelper dbHelper;
 
 	public MangaDataSource(Context context) {
-		dbHelper = new DatabaseMangaSQLHelper(context);
+		dbHelper = new DatabaseHelper(context);
 		this.context = context;
 		copyDatabase();
 	}
@@ -46,28 +48,28 @@ public class MangaDataSource {
 	public void addAllManga(List<Manga> mangaList) {
 		ContentValues values = new ContentValues();
 		for (Manga manga : mangaList) {
-			values.put(DatabaseMangaSQLHelper.COLUMN_MANGANAME,
+			values.put(DatabaseHelper.COLUMN_MANGANAME,
 					manga.getMangaName());
-			values.put(DatabaseMangaSQLHelper.COLUMN_LINK, manga.getLink());
-			values.put(DatabaseMangaSQLHelper.COLUMN_FAVOURITE,
+			values.put(DatabaseHelper.COLUMN_LINK, manga.getLink());
+			values.put(DatabaseHelper.COLUMN_FAVOURITE,
 					manga.getFavourite());
-			database.insert(DatabaseMangaSQLHelper.TABLE_MANGA, null, values);
+			database.insert(DatabaseHelper.TABLE_MANGA, null, values);
 			values.clear();
 		}
 	}
 
 	public Manga createManga(String manga, String link, int favourite) {
 		ContentValues values = new ContentValues();
-		values.put(DatabaseMangaSQLHelper.COLUMN_MANGANAME, manga);
-		values.put(DatabaseMangaSQLHelper.COLUMN_LINK, link);
-		values.put(DatabaseMangaSQLHelper.COLUMN_FAVOURITE, favourite);
+		values.put(DatabaseHelper.COLUMN_MANGANAME, manga);
+		values.put(DatabaseHelper.COLUMN_LINK, link);
+		values.put(DatabaseHelper.COLUMN_FAVOURITE, favourite);
 
-		long insertID = database.insert(DatabaseMangaSQLHelper.TABLE_MANGA,
+		long insertID = database.insert(DatabaseHelper.TABLE_MANGA,
 				null, values);
 
-		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_MANGA,
+		Cursor cursor = database.query(DatabaseHelper.TABLE_MANGA,
 				null,
-				DatabaseMangaSQLHelper.COLUMN_MANGA_ID + " = " + insertID, null,
+				DatabaseHelper.COLUMN_MANGA_ID + " = " + insertID, null,
 				null, null, null);
 		cursor.moveToFirst();
 		Manga newManga = cursorToManga(cursor);
@@ -76,14 +78,14 @@ public class MangaDataSource {
 	}
 
 	public void clearMangaTable() {
-		database.delete(DatabaseMangaSQLHelper.TABLE_MANGA, null, null);
+		database.delete(DatabaseHelper.TABLE_MANGA, null, null);
 	}
 
 	public void deleteManga(Manga manga) {
 		long id = manga.get_id();
 		System.out.println("Manga deleted with id: " + id);
-		database.delete(DatabaseMangaSQLHelper.TABLE_MANGA,
-				DatabaseMangaSQLHelper.COLUMN_MANGA_ID + " = " + id, null);
+		database.delete(DatabaseHelper.TABLE_MANGA,
+				DatabaseHelper.COLUMN_MANGA_ID + " = " + id, null);
 	}
 
 	private Manga cursorToManga(Cursor cursor) {
@@ -137,7 +139,7 @@ public class MangaDataSource {
 
 		}
 
-		String songDBPath = dBpath + "/" + DatabaseMangaSQLHelper.DATABASE_NAME;
+		String songDBPath = dBpath + "/" + DatabaseHelper.DATABASE_NAME;
 		File songDbFile = new File(songDBPath);
 		if (!songDbFile.exists()) {
 			Log.d(Config.TAG_LOG,
@@ -146,7 +148,7 @@ public class MangaDataSource {
 				AssetManager asset = context.getAssets();
 
 				InputStream is = asset
-						.open(DatabaseMangaSQLHelper.DATABASE_NAME);
+						.open(DatabaseHelper.DATABASE_NAME);
 
 				FileOutputStream fos = new FileOutputStream(songDbFile);
 				byte[] buffer = new byte[1024];
@@ -173,9 +175,9 @@ public class MangaDataSource {
 
 	public List<Manga> getAllMangaWKeyword(String newText) {
 		List<Manga> mangas = new ArrayList<Manga>();
-		String selection = DatabaseMangaSQLHelper.COLUMN_MANGANAME + " = "
+		String selection = DatabaseHelper.COLUMN_MANGANAME + " = "
 				+ newText;
-		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_MANGA,
+		Cursor cursor = database.query(DatabaseHelper.TABLE_MANGA,
 				null, selection, null, null, null, null);
 		Manga manga;
 		if (cursor.moveToFirst()) {
@@ -190,7 +192,7 @@ public class MangaDataSource {
 
 	public List<Manga> getAllManga() {
 		List<Manga> mangas = new ArrayList<Manga>();
-		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_MANGA,
+		Cursor cursor = database.query(DatabaseHelper.TABLE_MANGA,
 				null, null, null, null, null, null);
 		if (cursor.moveToFirst()) {
 			Manga manga;
@@ -206,8 +208,8 @@ public class MangaDataSource {
 
 	public ArrayList<Manga> getFavouriteManga() {
 		ArrayList<Manga> results = new ArrayList<Manga>();
-		String selection = DatabaseMangaSQLHelper.COLUMN_FAVOURITE + "= 1";
-		Cursor c = database.query(DatabaseMangaSQLHelper.TABLE_MANGA,
+		String selection = DatabaseHelper.COLUMN_FAVOURITE + "= 1";
+		Cursor c = database.query(DatabaseHelper.TABLE_MANGA,
 				null, selection, null, null, null, null);
 		if (c.moveToFirst()) {
 			Manga manga;
@@ -221,10 +223,10 @@ public class MangaDataSource {
 
 	private ContentValues mangaToContentValues(Manga manga) {
 		ContentValues values = new ContentValues();
-		values.put(DatabaseMangaSQLHelper.COLUMN_MANGANAME,
+		values.put(DatabaseHelper.COLUMN_MANGANAME,
 				manga.getMangaName());
-		values.put(DatabaseMangaSQLHelper.COLUMN_LINK, manga.getLink());
-		values.put(DatabaseMangaSQLHelper.COLUMN_FAVOURITE,
+		values.put(DatabaseHelper.COLUMN_LINK, manga.getLink());
+		values.put(DatabaseHelper.COLUMN_FAVOURITE,
 				manga.getFavourite());
 		return values;
 	}
@@ -232,9 +234,9 @@ public class MangaDataSource {
 	public void upDateMangas(ArrayList<Manga> updatedMangas) {
 		// TODO Auto-generated method stub
 		for (Manga manga : updatedMangas) {
-			database.update(DatabaseMangaSQLHelper.TABLE_MANGA,
+			database.update(DatabaseHelper.TABLE_MANGA,
 					mangaToContentValues(manga),
-					DatabaseMangaSQLHelper.COLUMN_MANGA_ID + "= ?",
+					DatabaseHelper.COLUMN_MANGA_ID + "= ?",
 					new String[] { String.valueOf(manga.get_id()) });
 		}
 
@@ -242,8 +244,8 @@ public class MangaDataSource {
 
 	public Manga getMangaWithId(long mangaId) {
 		Manga manga;
-		String selection = DatabaseMangaSQLHelper.COLUMN_MANGA_ID + "= ?" ;
-		Cursor cursor= database.query(DatabaseMangaSQLHelper.TABLE_MANGA, null, selection, new String[]{String.valueOf(mangaId)}, null, null, null);
+		String selection = DatabaseHelper.COLUMN_MANGA_ID + "= ?" ;
+		Cursor cursor= database.query(DatabaseHelper.TABLE_MANGA, null, selection, new String[]{String.valueOf(mangaId)}, null, null, null);
 		if (cursor.moveToFirst()){
 			return cursorToManga(cursor);
 		}

@@ -1,10 +1,11 @@
-package com.example.service;
+package service;
+
+import internetconnection.HtmlMangaHelper;
 
 import java.io.IOException;
 
 import org.htmlcleaner.XPatherException;
 
-import InternetConnection.HtmlMangaHelper;
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;

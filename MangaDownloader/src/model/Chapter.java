@@ -1,4 +1,4 @@
-package com.example.mangadownloader.Model;
+package model;
 
 public class Chapter {
 	String mangaName;
@@ -9,6 +9,7 @@ public class Chapter {
 	int pageNo;
 	String chapterName;
 	String link=null;
+	String localPath;
 	int status;
 	public static final int STATUS_CHAPTER_NOTDOWNLOAD = 0;
 	public static final int STATUS_CHAPTER_DOWNLOADING = STATUS_CHAPTER_NOTDOWNLOAD+1;
@@ -79,6 +80,15 @@ public class Chapter {
 		this (mangaName,chapterNo,chapterLink,chapterName);
 		this._id=_id;
 	}
+	public Chapter(long _id,String mangaName, int chapterNo, String chapterLink, String chapterName,int status){
+		this (_id,mangaName,chapterNo,chapterLink,chapterName);
+		this.status = status;
+	}
+	public Chapter(long _id,String mangaName, int chapterNo, String chapterLink, String chapterName,int status,String localPath){
+		this (_id,mangaName,chapterNo,chapterLink,chapterName,status);
+		this.localPath = localPath;
+	}
+	
 	public String getMangaName() {
 		return mangaName;
 	}

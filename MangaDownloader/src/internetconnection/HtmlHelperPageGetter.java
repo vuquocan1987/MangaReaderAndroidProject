@@ -1,4 +1,4 @@
-package InternetConnection;
+package internetconnection;
 
 import java.io.IOException;
 import java.net.URL;

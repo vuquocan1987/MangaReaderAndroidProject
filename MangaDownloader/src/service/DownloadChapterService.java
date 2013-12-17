@@ -1,4 +1,6 @@
-package com.example.service;
+package service;
+
+import internetconnection.HtmlHelperPageGetter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -10,9 +12,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import model.Chapter;
+
 import org.htmlcleaner.XPatherException;
 
-import InternetConnection.HtmlHelperPageGetter;
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
@@ -21,7 +24,6 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
-import com.example.mangadownloader.Model.Chapter;
 
 import config.Config;
 import database.connection.ChapterDataSource;
@@ -64,15 +66,8 @@ public class DownloadChapterService extends IntentService {
 		long chapterId = intent.getLongExtra(CHAPTER_ID, 0);
 		Chapter chapter = cds.getChapterWithId(chapterId);
 		String urlPath = chapter.getChapterLink();
-		String mangaName = chapter.getMangaName();
-		String chapterName = chapter.getChapterName();
 		
-		String filePath = Environment.getExternalStorageDirectory()
-				.getAbsolutePath()
-				+ "/data/manga/"
-				+ mangaName
-				+ "/"
-				+ chapterName.replace(' ', '_');
+		String filePath = Config.getPathForChapter(chapter);
 		File dir = new File(filePath);
 		if (!dir.exists()) {
 			dir.mkdirs();
@@ -96,11 +91,7 @@ public class DownloadChapterService extends IntentService {
 				fos.write(bytes.toByteArray());
 				fos.close();
 			}
-			// this bit of code is a bit clumsy but I don't know how to update
-			// the database otherwise
-			// because the activity could be already closed at this point!!! So
-			// there's no way to notify
-			// the application to update database -_-....
+
 			cds.updateStatusChapterId(chapterId,
 					Chapter.STATUS_CHAPTER_DOWNLOADED);
 			cds.close();

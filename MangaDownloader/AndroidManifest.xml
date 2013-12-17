@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mangadownloader"
+    package="an.vu.mangadownloader"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.mangadownloader.MainActivity"
+            android:name="activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/CustomActionBarTheme" >
             <intent-filter>
@@ -27,16 +27,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.mangadownloader.ContentActivity"
+            android:name="activity.ContentActivity"
             android:label="@string/app_name"
             android:theme="@style/CustomActionBarTheme" >
-
+	
         </activity>
-        <service android:name="com.example.service.ParsingMangaLinkService" >
+        <activity
+            android:name="activity.ShowPictureActivity"
+            android:label="@string/app_name"
+            android:theme="@style/CustomActionBarTheme" >
+	
+        </activity>
+        <service android:name="service.ParsingMangaLinkService" >
         </service>
-        <service android:name="com.example.service.DownloadChapterService" >
+        <service android:name="service.DownloadChapterService" >
         </service>
-        <service android:name="com.example.service.ParsingChapterMangaService">
+        <service android:name="service.ParsingChapterMangaService">
         </service>
     </application>
 

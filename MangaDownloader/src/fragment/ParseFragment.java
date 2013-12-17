@@ -1,9 +1,6 @@
 package fragment;
 
-import com.example.mangadownloader.R;
-import com.example.mangadownloader.R.id;
-import com.example.mangadownloader.R.layout;
-
+import an.vu.mangadownloader.R;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

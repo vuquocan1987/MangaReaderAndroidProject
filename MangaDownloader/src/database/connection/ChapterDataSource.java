@@ -5,11 +5,11 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.mangadownloader.Model.Chapter;
-import com.example.mangadownloader.Model.Manga;
+import model.Chapter;
+import model.Manga;
+
 
 import config.Config;
-
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -22,13 +22,13 @@ import android.widget.Toast;
 public class ChapterDataSource {
 	private Context context;
 	private SQLiteDatabase database;
-	private DatabaseMangaSQLHelper dbHelper;
-	private String[] allColumns = { DatabaseMangaSQLHelper.COLUMN_MANGANAME,
-			DatabaseMangaSQLHelper.COLUMN_CHAPTER_NO,
-			DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK };
+	private DatabaseHelper dbHelper;
+	private String[] allColumns = { DatabaseHelper.COLUMN_MANGANAME,
+			DatabaseHelper.COLUMN_CHAPTER_NO,
+			DatabaseHelper.COLUMN_CHAPTER_LINK };
 
 	public ChapterDataSource(Context context) {
-		dbHelper = new DatabaseMangaSQLHelper(context);
+		dbHelper = new DatabaseHelper(context);
 		this.context = context;
 	}
 
@@ -43,32 +43,33 @@ public class ChapterDataSource {
 	public void addChapterList(List<Chapter> chapterList, String mangaName) {
 		ContentValues values = new ContentValues();
 		for (Chapter chapter : chapterList) {
-			values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK,
+			values.put(DatabaseHelper.COLUMN_CHAPTER_LINK,
 					chapter.getChapterLink());
-			values.put(DatabaseMangaSQLHelper.COLUMN_MANGANAME, mangaName);
-			values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_NO,
+			values.put(DatabaseHelper.COLUMN_MANGANAME, mangaName);
+			values.put(DatabaseHelper.COLUMN_CHAPTER_NO,
 					chapter.getChapterNo());
-			values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_NAME,
+			values.put(DatabaseHelper.COLUMN_CHAPTER_NAME,
 					chapter.getChapterName());
-			database.insert(DatabaseMangaSQLHelper.TABLE_CHAPTER, null, values);
+			values.put(DatabaseHelper.COLUMN_CHAPTER_STATUS, chapter.getStatus());
+			database.insert(DatabaseHelper.TABLE_CHAPTER, null, values);
 			values.clear();
 		}
 	}
 
 	public Chapter createManga(Chapter chapter) {
 		ContentValues values = new ContentValues();
-		values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK,
+		values.put(DatabaseHelper.COLUMN_CHAPTER_LINK,
 				chapter.getChapterLink());
-		values.put(DatabaseMangaSQLHelper.COLUMN_MANGANAME,
+		values.put(DatabaseHelper.COLUMN_MANGANAME,
 				chapter.getMangaName());
-		values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_NO,
+		values.put(DatabaseHelper.COLUMN_CHAPTER_NO,
 				chapter.getChapterNo());
 
 		// long insertID = database.insert(ChapterSQLHelper.TABLE_CHAPTER, null,
 		// values);
 
-		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_CHAPTER,
-				allColumns, DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK + " = "
+		Cursor cursor = database.query(DatabaseHelper.TABLE_CHAPTER,
+				allColumns, DatabaseHelper.COLUMN_CHAPTER_LINK + " = "
 						+ chapter.getChapterLink(), null, null, null, null);
 		cursor.moveToFirst();
 		Chapter newChapter = cursorToChapter(cursor);
@@ -82,13 +83,13 @@ public class ChapterDataSource {
 	public void deleteChapter(Chapter chapter) {
 		String link = chapter.getChapterLink();
 		System.out.println("Manga deleted with link: " + link);
-		database.delete(DatabaseMangaSQLHelper.TABLE_CHAPTER,
-				DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK + " = " + link, null);
+		database.delete(DatabaseHelper.TABLE_CHAPTER,
+				DatabaseHelper.COLUMN_CHAPTER_LINK + " = " + link, null);
 	}
 
 	public List<Chapter> getAllChapter() {
 		List<Chapter> chapters = new ArrayList<Chapter>();
-		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_CHAPTER,
+		Cursor cursor = database.query(DatabaseHelper.TABLE_CHAPTER,
 				allColumns, null, null, null, null, null);
 		if (cursor.moveToFirst()) {
 			Chapter chapter;
@@ -105,9 +106,9 @@ public class ChapterDataSource {
 	public List<Chapter> getAllChapterForManga(Manga manga) {
 		// TODO Auto-generated method stub
 		ArrayList<Chapter> chapterList = new ArrayList<Chapter>();
-		String selection = DatabaseMangaSQLHelper.COLUMN_MANGANAME + "= '"
+		String selection = DatabaseHelper.COLUMN_MANGANAME + "= '"
 				+ manga.getMangaName() + "'";
-		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_CHAPTER,
+		Cursor cursor = database.query(DatabaseHelper.TABLE_CHAPTER,
 				null, selection, null, null, null, null);
 		return cursorToChapterList(cursor);
 	}
@@ -116,15 +117,17 @@ public class ChapterDataSource {
 
 		Chapter chapter = new Chapter(
 				cursor.getLong(cursor
-						.getColumnIndex(DatabaseMangaSQLHelper.COLUMN_CHAPTER_ID)),
+						.getColumnIndex(DatabaseHelper.COLUMN_CHAPTER_ID)),
 				cursor.getString(cursor
-						.getColumnIndex(DatabaseMangaSQLHelper.COLUMN_MANGANAME)),
+						.getColumnIndex(DatabaseHelper.COLUMN_MANGANAME)),
 				cursor.getInt(cursor
-						.getColumnIndex(DatabaseMangaSQLHelper.COLUMN_CHAPTER_NO)),
+						.getColumnIndex(DatabaseHelper.COLUMN_CHAPTER_NO)),
 				cursor.getString(cursor
-						.getColumnIndex(DatabaseMangaSQLHelper.COLUMN_CHAPTER_LINK)),
+						.getColumnIndex(DatabaseHelper.COLUMN_CHAPTER_LINK)),
 				cursor.getString(cursor
-						.getColumnIndex(DatabaseMangaSQLHelper.COLUMN_CHAPTER_NAME)));
+						.getColumnIndex(DatabaseHelper.COLUMN_CHAPTER_NAME)),
+				cursor.getInt(cursor
+						.getColumnIndex(DatabaseHelper.COLUMN_CHAPTER_STATUS)));
 		return chapter;
 	}
 
@@ -143,9 +146,9 @@ public class ChapterDataSource {
 	}
 
 	public List<Chapter> getAllChapterNotDownloaded() {
-		String selection = DatabaseMangaSQLHelper.COLUMN_CHAPTER_STATUS
+		String selection = DatabaseHelper.COLUMN_CHAPTER_STATUS
 				+ " <> " + Chapter.STATUS_CHAPTER_NOTDOWNLOAD;
-		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_CHAPTER,
+		Cursor cursor = database.query(DatabaseHelper.TABLE_CHAPTER,
 				null, selection, null, null, null, null);
 		return cursorToChapterList(cursor);
 	}
@@ -153,22 +156,23 @@ public class ChapterDataSource {
 	public void updateStatusChapterId(long chapterId,
 			int statusChapterDownloaded) {
 		ContentValues values = new ContentValues();
-		values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_STATUS,
+		values.put(DatabaseHelper.COLUMN_CHAPTER_STATUS,
 				statusChapterDownloaded);
 
-		String whereClause = DatabaseMangaSQLHelper.COLUMN_CHAPTER_ID + " = ?";
-		long id = database.update(DatabaseMangaSQLHelper.TABLE_CHAPTER, values,
+		String whereClause = DatabaseHelper.COLUMN_CHAPTER_ID + " = ?";
+		long id = database.update(DatabaseHelper.TABLE_CHAPTER, values,
 				whereClause, new String[] { String.valueOf(chapterId) });
-		 System.out.println("id of chapter just updated status" + id);
-		 Log.d(Config.TAG_LOG, "id of chapter just updated status: " + id);
+		System.out.println("id of chapter just updated status" + id);
+		Log.d(Config.TAG_LOG, "id of chapter just updated status: " + id);
 	}
 
 	public Chapter getChapterWithId(long chapterId) {
-		
-		String selection = DatabaseMangaSQLHelper.COLUMN_CHAPTER_ID + " = ?";
-		Cursor cursor = database.query(DatabaseMangaSQLHelper.TABLE_CHAPTER, null, selection,
-				new String[] { String.valueOf(chapterId) }, null, null, null);
-		if (cursor.moveToFirst()){
+
+		String selection = DatabaseHelper.COLUMN_CHAPTER_ID + " = ?";
+		Cursor cursor = database.query(DatabaseHelper.TABLE_CHAPTER,
+				null, selection, new String[] { String.valueOf(chapterId) },
+				null, null, null);
+		if (cursor.moveToFirst()) {
 			return cursorToChapter(cursor);
 		}
 		return null;
@@ -187,15 +191,28 @@ public class ChapterDataSource {
 	private void updateStatusChapterNoOverWrite(Chapter chapter) {
 		// TODO Auto-generated method stub
 		ContentValues values = new ContentValues();
-		values.put(DatabaseMangaSQLHelper.COLUMN_CHAPTER_STATUS,
+		values.put(DatabaseHelper.COLUMN_CHAPTER_STATUS,
 				chapter.getStatus());
 
-		String whereClause = DatabaseMangaSQLHelper.COLUMN_CHAPTER_ID + " = ?"
-				+ " AND " + DatabaseMangaSQLHelper.COLUMN_CHAPTER_STATUS + " <> " + Chapter.STATUS_CHAPTER_DOWNLOADED;
-		long id = database.update(DatabaseMangaSQLHelper.TABLE_CHAPTER, values,
-				whereClause, new String[] { String.valueOf(chapter.get_id()) });
-		System.out.println("id of chapter just updated status" + id);
-		 Log.d(Config.TAG_LOG, "id of chapter just updated status" + id);
+		String whereClause = DatabaseHelper.COLUMN_CHAPTER_ID + " = ?"
+				+ " AND " + DatabaseHelper.COLUMN_CHAPTER_STATUS
+				+ " <> " + Chapter.STATUS_CHAPTER_DOWNLOADED;
+		int numberAffectedRows = database.update(
+				DatabaseHelper.TABLE_CHAPTER, values, whereClause,
+				new String[] { String.valueOf(chapter.get_id()) });
+		System.out.println("number of rows with status change"
+				+ numberAffectedRows);
+		Log.d(Config.TAG_LOG, "number of rows with status change"
+				+ numberAffectedRows);
 
+	}
+
+	public List<Chapter> getAllDownloadedChapter() {
+		// TODO Auto-generated method stub
+		String selection = DatabaseHelper.COLUMN_CHAPTER_STATUS + " = "
+				+ Chapter.STATUS_CHAPTER_DOWNLOADED;
+		Cursor cursor = database.query(DatabaseHelper.TABLE_CHAPTER,
+				null, selection, null, null, null, null);
+		return cursorToChapterList(cursor);
 	}
 }

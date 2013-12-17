@@ -3,22 +3,20 @@ package fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Manga;
+
+import an.vu.mangadownloader.R;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
-import com.example.mangadownloader.R;
-import com.example.mangadownloader.Model.Manga;
-import com.example.mangadownloader.R.id;
-import com.example.mangadownloader.R.layout;
 
 import database.connection.MangaDataSource;
 
