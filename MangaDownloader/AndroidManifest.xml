@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="an.vu.mangadownloader"
+    package="anvu.bk.mangadownloader"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="16" />
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="activity.MainActivity"
+            android:name="anvu.bk.activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/CustomActionBarTheme" >
             <intent-filter>
@@ -27,23 +27,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="activity.ContentActivity"
+            android:name="anvu.bk.activity.ContentActivity"
             android:label="@string/app_name"
             android:theme="@style/CustomActionBarTheme" >
 	
         </activity>
         <activity
-            android:name="activity.ShowPictureActivity"
+            android:name="anvu.bk.activity.ShowPictureActivity"
             android:label="@string/app_name"
             android:theme="@style/CustomActionBarTheme" >
 	
         </activity>
-        <service android:name="service.ParsingMangaLinkService" >
+        
+        <service android:name="anvu.bk.service.ParsingMangaLinkService" >
         </service>
-        <service android:name="service.DownloadChapterService" >
+        
+        <service android:name="anvu.bk.service.DownloadChapterService" >
         </service>
-        <service android:name="service.ParsingChapterMangaService">
+        
+        <service android:name="anvu.bk.service.ParsingChapterMangaService">
         </service>
+
     </application>
 
 </manifest>

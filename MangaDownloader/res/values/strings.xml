@@ -6,5 +6,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="chapterName">MangaChapter</string>
     <string name="mangaName">naruto</string>
-
+    <string name="manga_name">Manga Name</string>
+    <string name="refresh_description">Refresh</string>
+    <string name="percentage">%</string>
+    <string name="mangaPage">page</string>
+    <string name="chapterStatus">status</string>
 </resources>
